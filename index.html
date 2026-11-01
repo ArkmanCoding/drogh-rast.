@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0B0D14">
+<title>صبر و دروغ — یک روایت تعاملی</title>
+<meta name="description" content="یک روایت تعاملی درباره‌ی صبر و دروغ — پروژه‌ی پژوهشی پایه‌ی نهم، کتاب «از من تا خدا»">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   01. RESET & BASE
+   ═══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html, body { height: 100%; height: 100dvh; }
+body {
+  font-family: 'Vazirmatn', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 400;
+  background: var(--bg-deep);
+  color: var(--ink);
+  line-height: 1.9;
+  letter-spacing: 0;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  user-select: none;
+  -webkit-user-select: none;
+}
+button {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  letter-spacing: inherit;
+}
+.narrative, .reflection-text, .feedback-text {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   02. DESIGN TOKENS
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --bg-deep: #0B0D14;
+  --bg-mid: #131725;
+  --bg-surface: #1A1F30;
+  --bg-soft: #22283C;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hi: rgba(255, 255, 255, 0.12);
+
+  --ink: #E8EAF2;
+  --ink-soft: #B4B9CA;
+  --ink-muted: #7A8095;
+  --ink-faint: #454A5E;
+
+  --gold: #D4B26A;
+  --gold-soft: rgba(212, 178, 106, 0.16);
+  --gold-glow: rgba(212, 178, 106, 0.32);
+
+  --truth: #7FB99A;
+  --truth-soft: rgba(127, 185, 154, 0.14);
+  --truth-glow: rgba(127, 185, 154, 0.3);
+
+  --lie: #C98274;
+  --lie-soft: rgba(201, 130, 116, 0.14);
+  --lie-glow: rgba(201, 130, 116, 0.3);
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-2: 0 8px 24px rgba(0,0,0,0.4);
+  --shadow-3: 0 24px 64px rgba(0,0,0,0.5);
+  --shadow-gold: 0 0 60px rgba(212, 178, 106, 0.15);
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 32px;
+
+  --t-fast: 180ms;
+  --t-mid: 320ms;
+  --t-slow: 560ms;
+  --t-cinematic: 900ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-still: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   03. TYPOGRAPHY
+   ═══════════════════════════════════════════════════════════════ */
+.body-text {
+  font-size: clamp(0.95rem, 2.4vw, 1.06rem);
+  line-height: 2.05;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+.headline {
+  font-weight: 700;
+  font-size: clamp(1.4rem, 4.4vw, 2rem);
+  line-height: 1.4;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.display {
+  font-weight: 900;
+  font-size: clamp(2.2rem, 8vw, 3.6rem);
+  line-height: 1.25;
+  color: var(--ink);
+}
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-weight: 500;
+  font-family: 'Inter', 'Vazirmatn', sans-serif;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   04. BACKGROUND LAYERS
+   ═══════════════════════════════════════════════════════════════ */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  background: var(--bg-deep);
+}
+.bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 120% 90% at 50% 45%, var(--bg-mid) 0%, var(--bg-deep) 72%);
+}
+.bg-aurora {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  will-change: transform;
+  pointer-events: none;
+}
+.bg-aurora-gold {
+  top: -12vw;
+  right: -8vw;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, var(--gold-soft) 0%, transparent 65%);
+  opacity: 0.35;
+  animation: breatheGold 18s var(--ease-still) infinite;
+}
+.bg-aurora-moon {
+  bottom: -12vw;
+  left: -8vw;
+  width: 44vw;
+  height: 44vw;
+  background: radial-gradient(circle, rgba(58, 74, 107, 0.22) 0%, transparent 65%);
+  filter: blur(140px);
+  animation: breatheMoon 22s var(--ease-still) infinite;
+}
+@keyframes breatheGold {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes breatheMoon {
+  0%, 100% { transform: scale(1.06); }
+  50% { transform: scale(1); }
+}
+.bg-stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  /* box-shadow generated by JS */
+  pointer-events: none;
+}
+.twinkle-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--ink);
+  border-radius: 50%;
+  opacity: 0.45;
+  box-shadow: 0 0 5px rgba(232, 234, 242, 0.5);
+  animation: twinkle 3s ease-in-out infinite;
+  pointer-events: none;
+}
+.twinkle-star:nth-child(2) { animation-delay: 3.5s; animation-duration: 5.5s; }
+.twinkle-star:nth-child(3) { animation-delay: 6.8s; animation-duration: 6.5s; }
+@keyframes twinkle {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+.bg-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.bg-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   05. SCREEN SYSTEM
+   ═══════════════════════════════════════════════════════════════ */
+.app {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding-top: max(2rem, env(safe-area-inset-top));
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+}
+.screen::-webkit-scrollbar { width: 0; height: 0; }
+.screen.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   06. SPLASH
+   ═══════════════════════════════════════════════════════════════ */
+.screen[data-screen="splash"] {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-inline: 1.5rem;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+}
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 560px;
+  width: 100%;
+}
+.splash-line {
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 1rem;
+  transform-origin: center;
+}
+.splash-eyebrow {
+  margin-bottom: 1.5rem;
+}
+.splash-title {
+  font-weight: 900;
+  font-size: clamp(2.2rem, 8vw, 3.6rem);
+  line-height: 1.2;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 1rem;
+}
+.splash-ornament {
+  font-size: 0.55rem;
+  color: var(--gold);
+  opacity: 0.5;
+  margin-bottom: 1.75rem;
+  display: inline-block;
+  line-height: 1;
+}
+.splash-subtitle {
+  font-weight: 300;
+  font-size: clamp(0.95rem, 2.6vw, 1.1rem);
+  color: var(--ink-soft);
+  line-height: 1.9;
+  margin-bottom: 1.5rem;
+}
+.splash-body {
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: var(--ink-muted);
+  line-height: 2;
+  max-width: 42ch;
+  margin: 0 auto 2.25rem;
+}
+.splash-start {
+  margin-top: 0.5rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   07. SCENARIO SCREENS
+   ═══════════════════════════════════════════════════════════════ */
+.scenario {
+  padding-inline: 1.5rem;
+  align-items: stretch;
+}
+.scenario-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0.5rem 0 1rem;
+  flex-shrink: 0;
+}
+.progress {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.progress-diamond {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: var(--ink-faint);
+  transform: rotate(45deg);
+  opacity: 0.6;
+  transition: background 500ms var(--ease-out), opacity 500ms var(--ease-out);
+}
+.progress-diamond.is-current { background: var(--gold); opacity: 1; }
+.progress-diamond.is-truth { background: var(--truth); opacity: 0.85; }
+.progress-diamond.is-lie { background: var(--lie); opacity: 0.85; }
+.moment-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  letter-spacing: 0.15em;
+}
+.scenario-body {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 1rem 0 2rem;
+}
+.scenario-title {
+  font-weight: 700;
+  font-size: clamp(1.4rem, 4.4vw, 2rem);
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+.scenario-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.7;
+  margin: 0 auto 1.75rem;
+  transform-origin: center;
+}
+.narrative {
+  font-weight: 400;
+  font-size: clamp(0.95rem, 2.4vw, 1.06rem);
+  color: var(--ink-soft);
+  line-height: 2.05;
+  max-width: 46ch;
+  margin: 0 auto;
+}
+.hinge {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--ink-muted);
+  letter-spacing: 0.02em;
+}
+.choices {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 560px;
+  margin-top: 1rem;
+}
+@media (min-width: 640px) {
+  .choices {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+.scenario-foot {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 0.5rem 0;
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   08. CHOICE BUTTONS
+   ═══════════════════════════════════════════════════════════════ */
+.choice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  min-height: 64px;
+  border-radius: var(--r-md);
+  background: transparent;
+  border: 1px solid;
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.7;
+  color: var(--ink);
+  text-align: right;
+  cursor: pointer;
+  transition: border-color var(--t-mid) var(--ease-out),
+              background var(--t-mid) var(--ease-out),
+              box-shadow var(--t-mid) var(--ease-out),
+              transform 120ms var(--ease-out);
+}
+.choice-truth { border-color: rgba(127, 185, 154, 0.3); }
+.choice-lie { border-color: rgba(201, 130, 116, 0.3); }
+.choice-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: transform var(--t-mid) var(--ease-out);
+}
+.choice-truth .choice-dot { background: var(--truth); box-shadow: 0 0 8px rgba(127, 185, 154, 0.4); }
+.choice-lie .choice-dot { background: var(--lie); box-shadow: 0 0 8px rgba(201, 130, 116, 0.4); }
+.choice-text { flex: 1; }
+.choice-truth:hover {
+  border-color: var(--truth);
+  background: var(--truth-soft);
+  box-shadow: 0 0 30px var(--truth-glow);
+}
+.choice-lie:hover {
+  border-color: var(--lie);
+  background: var(--lie-soft);
+  box-shadow: 0 0 30px var(--lie-glow);
+}
+.choice-truth:hover .choice-dot,
+.choice-lie:hover .choice-dot {
+  transform: scale(1.35);
+}
+.choice:active {
+  transform: scale(0.98);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.35);
+}
+.choice:focus-visible {
+  outline: 2px solid;
+  outline-offset: 3px;
+}
+.choice-truth:focus-visible { outline-color: var(--truth); }
+.choice-lie:focus-visible { outline-color: var(--lie); }
+
+/* ═══════════════════════════════════════════════════════════════
+   09. FEEDBACK OVERLAY
+   ═══════════════════════════════════════════════════════════════ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(11, 13, 20, 0.78);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+.overlay[hidden] { display: none; }
+.feedback-card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  padding: 2.25rem 1.75rem 1.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-3);
+  text-align: center;
+  overflow: hidden;
+}
+.feedback-glow {
+  position: absolute;
+  inset: -40% -20% auto;
+  height: 60%;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.feedback-glow.is-truth { background: radial-gradient(circle, var(--truth-glow) 0%, transparent 70%); }
+.feedback-glow.is-lie { background: radial-gradient(circle, var(--lie-glow) 0%, transparent 70%); }
+.feedback-icon {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1rem;
+}
+.feedback-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.feedback-title {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--ink);
+  line-height: 1.6;
+  margin-bottom: 0.85rem;
+}
+.feedback-text {
+  position: relative;
+  z-index: 1;
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  line-height: 1.95;
+  max-width: 40ch;
+  margin: 0 auto 1.5rem;
+}
+.feedback-divider {
+  position: relative;
+  z-index: 1;
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.5;
+  margin: 0 auto 0.75rem;
+}
+.feedback-note {
+  position: relative;
+  z-index: 1;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
+}
+.feedback-btn {
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   10. REFLECTION SCREEN
+   ═══════════════════════════════════════════════════════════════ */
+.screen[data-screen="reflection"] {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-inline: 1.5rem;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+}
+.reflection-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 560px;
+  width: 100%;
+}
+.reflection-ornament {
+  font-size: 0.7rem;
+  color: var(--gold);
+  opacity: 0.6;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  line-height: 1;
+  transform-origin: center;
+}
+.reflection-preface {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  margin-bottom: 1.75rem;
+  letter-spacing: 0.02em;
+}
+.reflection-title {
+  font-weight: 700;
+  font-size: clamp(1.4rem, 4.4vw, 2rem);
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 1.25rem;
+}
+.reflection-text {
+  font-size: clamp(0.95rem, 2.4vw, 1.06rem);
+  font-weight: 400;
+  color: var(--ink-soft);
+  line-height: 2.05;
+  max-width: 46ch;
+  margin: 0 auto 2rem;
+}
+.reflection-divider {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.65;
+  margin: 0 auto 2rem;
+  transform-origin: center;
+}
+.reflection-lesson {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--ink);
+  line-height: 1.9;
+  max-width: 40ch;
+  margin: 0 auto 1.25rem;
+}
+.reflection-attribution {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  line-height: 1.8;
+  margin-bottom: 2.25rem;
+}
+.restart-link {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--ink-faint);
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: color var(--t-mid) var(--ease-out);
+}
+.restart-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0.25rem;
+  left: 50%;
+  right: 50%;
+  height: 1px;
+  background: var(--gold);
+  transition: left var(--t-mid) var(--ease-out), right var(--t-mid) var(--ease-out);
+}
+.restart-link:hover { color: var(--gold); }
+.restart-link:hover::after { left: 25%; right: 25%; }
+.restart-link:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: var(--r-sm);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   11. PRIMARY BUTTON
+   ═══════════════════════════════════════════════════════════════ */
+.btn-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  min-height: 48px;
+  border-radius: var(--r-md);
+  border: 1px solid rgba(212, 178, 106, 0.4);
+  background: transparent;
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  transition: all var(--t-mid) var(--ease-out);
+}
+.btn-primary::before {
+  content: '◆';
+  display: inline-block;
+  opacity: 0;
+  transform: scale(0.4);
+  margin-inline-end: 8px;
+  font-size: 0.65em;
+  color: currentColor;
+  transition: opacity var(--t-mid) var(--ease-out), transform var(--t-mid) var(--ease-out);
+}
+.btn-primary:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--bg-deep);
+  letter-spacing: 0.1em;
+  box-shadow: 0 0 40px var(--gold-glow);
+}
+.btn-primary:hover:not(:disabled)::before {
+  opacity: 1;
+  transform: scale(1);
+}
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.98);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+}
+.btn-primary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.feedback-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   13. CREATOR SIGNATURE
+   ═══════════════════════════════════════════════════════════════ */
+.creator-signature {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px max(12px, env(safe-area-inset-bottom));
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+  z-index: 30;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 700ms var(--ease-out), color 500ms var(--ease-out);
+  background: linear-gradient(to top, var(--bg-deep) 45%, transparent);
+}
+.creator-signature.is-visible { opacity: 1; }
+.creator-signature.is-shimmering { color: var(--gold); }
+.creator-signature::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, transparent 35%, rgba(212,178,106,0.22) 50%, transparent 65%, transparent 100%);
+  background-size: 220% 100%;
+  background-position: 200% 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: overlay;
+}
+.creator-signature.is-shimmering::after {
+  opacity: 1;
+  animation: shimmer 1.2s ease-out 1 forwards;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   14. UTILITIES
+   ═══════════════════════════════════════════════════════════════ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   15. RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
+@media (min-width: 640px) {
+  .screen { padding-top: max(3rem, env(safe-area-inset-top)); padding-bottom: max(3rem, env(safe-area-inset-bottom)); }
+  .feedback-card { padding: 2.5rem 2.5rem 2rem; }
+  .choice { padding: 18px 24px; min-height: 68px; }
+}
+@media (max-width: 480px) {
+  .creator-signature { font-size: 0.72rem; }
+  .scenario-head { padding: 0.25rem 0 0.75rem; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   16. REDUCED MOTION
+   ═══════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .bg-aurora { animation: none !important; }
+  .twinkle-star { animation: none !important; opacity: 0.55; }
+  .creator-signature.is-shimmering::after { animation: none !important; opacity: 0; }
+  .creator-signature.is-shimmering { color: var(--ink-faint); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   17. HIGH CONTRAST
+   ═══════════════════════════════════════════════════════════════ */
+@media (prefers-contrast: more) {
+  :root {
+    --ink: #FFFFFF;
+    --ink-soft: #DDE1EA;
+    --ink-muted: #A8AEC0;
+    --border: rgba(255, 255, 255, 0.14);
+    --border-hi: rgba(255, 255, 255, 0.24);
+  }
+  .choice-truth { border-color: var(--truth); }
+  .choice-lie { border-color: var(--lie); }
+  .choice:focus-visible { outline-width: 3px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   18. PRINT
+   ═══════════════════════════════════════════════════════════════ */
+@media print {
+  body { background: #fff; color: #000; }
+  .bg, .creator-signature, .progress, .moment-label, .choices, .hinge,
+  .scenario-foot, .restart-link, .overlay, .scenario-divider,
+  .reflection-divider, .splash-line { display: none !important; }
+  .screen { position: static; opacity: 1 !important; color: #000; page-break-after: always; padding: 2cm; }
+  .screen * { color: #000 !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ BACKGROUND LAYERS ═══════════════ -->
+<div class="bg" aria-hidden="true">
+  <div class="bg-gradient"></div>
+  <div class="bg-aurora bg-aurora-gold"></div>
+  <div class="bg-aurora bg-aurora-moon"></div>
+  <div class="bg-stars" id="starField"></div>
+  <div class="twinkle-star" style="top: 12%; left: 22%;"></div>
+  <div class="twinkle-star" style="top: 38%; left: 71%;"></div>
+  <div class="twinkle-star" style="top: 74%; left: 44%;"></div>
+  <div class="bg-grain"></div>
+  <div class="bg-vignette"></div>
+</div>
+
+<!-- ═══════════════ APP ═══════════════ -->
+<main class="app" id="app">
+
+  <!-- ─────────── SPLASH ─────────── -->
+  <section data-screen="splash" class="screen is-active">
+    <div class="splash-content">
+      <div class="splash-line" id="splashLine"></div>
+      <p class="eyebrow splash-eyebrow" id="splashEyebrow">A Reflection on Sabr</p>
+      <h1 class="display splash-title" id="splashTitle">صبر و دروغ</h1>
+      <div class="splash-ornament" id="splashOrnament">◆</div>
+      <p class="splash-subtitle" id="splashSubtitle">یک روایت تعاملی از نبردی درونی</p>
+      <p class="splash-body" id="splashBody">سه لحظه‌ی کوچک در انتظار توست. در هر کدام، انتخابی که می‌کنی، بازتابی از آن چیزی است که با خود حمل می‌کنی.</p>
+      <button type="button" class="btn-primary splash-start" id="startBtn">شروع</button>
+    </div>
+  </section>
+
+  <!-- ─────────── SCENARIO 1 ─────────── -->
+  <section data-screen="scenario-1" class="screen scenario">
+    <header class="scenario-head">
+      <div class="progress" aria-hidden="true">
+        <span class="progress-diamond is-current"></span>
+        <span class="progress-diamond"></span>
+        <span class="progress-diamond"></span>
+      </div>
+      <div class="moment-label"></div>
+    </header>
+    <div class="scenario-body">
+      <h2 class="scenario-title"></h2>
+      <div class="scenario-divider"></div>
+      <p class="narrative"></p>
+      <p class="hinge">چه می‌کنی؟</p>
+      <div class="choices">
+        <button type="button" class="choice choice-truth" data-choice="truth">
+          <span class="choice-dot"></span>
+          <span class="choice-text"></span>
+        </button>
+        <button type="button" class="choice choice-lie" data-choice="lie">
+          <span class="choice-dot"></span>
+          <span class="choice-text"></span>
+        </button>
+      </div>
+    </div>
+    <footer class="scenario-foot"></footer>
+  </section>
+
+  <!-- ─────────── SCENARIO 2 ─────────── -->
+  <section data-screen="scenario-2" class="screen scenario">
+    <header class="scenario-head">
+      <div class="progress" aria-hidden="true">
+        <span class="progress-diamond is-current"></span>
+        <span class="progress-diamond"></span>
+        <span class="progress-diamond"></span>
+      </div>
+      <div class="moment-label"></div>
+    </header>
+    <div class="scenario-body">
+      <h2 class="scenario-title"></h2>
+      <div class="scenario-divider"></div>
+      <p class="narrative"></p>
+      <p class="hinge">چه می‌کنی؟</p>
+      <div class="choices">
+        <button type="button" class="choice choice-truth" data-choice="truth">
+          <span class="choice-dot"></span>
+          <span class="choice-text"></span>
+        </button>
+        <button type="button" class="choice choice-lie" data-choice="lie">
+          <span class="choice-dot"></span>
+          <span class="choice-text"></span>
+        </button>
+      </div>
+    </div>
+    <footer class="scenario-foot"></footer>
+  </section>
+
+  <!-- ─────────── SCENARIO 3 ─────────── -->
+  <section data-screen="scenario-3" class="screen scenario">
+    <header class="scenario-head">
+      <div class="progress" aria-hidden="true">
+        <span class="progress-diamond is-current"></span>
+        <span class="progress-diamond"></span>
+        <span class="progress-diamond"></span>
+      </div>
+      <div class="moment-label"></div>
+    </header>
+    <div class="scenario-body">
+      <h2 class="scenario-title"></h2>
+      <div class="scenario-divider"></div>
+      <p class="narrative"></p>
+      <p class="hinge">چه می‌کنی؟</p>
+      <div class="choices">
+        <button type="button" class="choice choice-truth" data-choice="truth">
+          <span class="choice-dot"></span>
+          <span class="choice-text"></span>
+        </button>
+        <button type="button" class="choice choice-lie" data-choice="lie">
+          <span class="choice-dot"></span>
+          <span class="choice-text"></span>
+        </button>
+      </div>
+    </div>
+    <footer class="scenario-foot"></footer>
+  </section>
+
+  <!-- ─────────── REFLECTION ─────────── -->
+  <section data-screen="reflection" class="screen reflection">
+    <div class="reflection-content">
+      <div class="reflection-ornament" id="reflectionOrnament">◆</div>
+      <p class="reflection-preface">حالا، یک لحظه به خودت نگاه کن.</p>
+      <h2 class="reflection-title" id="reflectionTitle"></h2>
+      <p class="reflection-text" id="reflectionText"></p>
+      <div class="reflection-divider" id="reflectionDivider"></div>
+      <p class="reflection-lesson" id="reflectionLesson">صبر، سکوت نیست. صبر، انتخابِ راست‌ماندن است — حتی وقتی دروغ، ساده‌تر است.</p>
+      <p class="reflection-attribution" id="reflectionAttribution">بر اساس مفهوم صبر در کتاب «از من تا خدا» — پایه‌ی نهم</p>
+      <button type="button" class="restart-link" id="restartBtn">از اول شروع کن</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════ FEEDBACK OVERLAY ═══════════════ -->
+<div class="overlay" id="feedbackOverlay" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle" aria-describedby="feedbackText" hidden>
+  <div class="feedback-card" id="feedbackCard">
+    <div class="feedback-glow" id="feedbackGlow"></div>
+    <div class="feedback-icon" id="feedbackIcon" aria-hidden="true"></div>
+    <h3 class="feedback-title" id="feedbackTitle"></h3>
+    <p class="feedback-text" id="feedbackText"></p>
+    <div class="feedback-divider"></div>
+    <p class="feedback-note">برای ادامه، یک لحظه نفس بکش.</p>
+    <button type="button" class="btn-primary feedback-btn" id="feedbackBtn" disabled>ادامه</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CREATOR SIGNATURE ═══════════════ -->
+<footer class="creator-signature" id="signature">تهیه شده توسط محمد ادیب محمدی</footer>
+
+<!-- ═══════════════ LIVE REGION ═══════════════ -->
+<div class="sr-only" id="liveRegion" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   01. CONSTANTS — All Persian narrative content lives here
+   ═══════════════════════════════════════════════════════════════ */
+const SCENARIOS = [
+  {
+    id: 'scenario-1',
+    label: 'لحظه‌ی اول',
+    title: 'شکستن گلدان',
+    narrative: 'بعد از ظهر است. خانه ساکت است. می‌خواهی لیوانی برداری، دستت می‌لرزد — و صدای شکستن، سکوت را می‌شکند. مادرت از آشپزخانه صدا می‌دهد: «چی صدا داد؟»',
+    choices: {
+      truth: {
+        text: 'گلدان را من شکستم.',
+        feedback: {
+          title: 'چیزی که با خودت حمل می‌کنی',
+          text: 'سنگینی اعتراف، یک لحظه است. اما بعدش، چیزی درونت می‌نشیند — نه از سر ترس، از سر آرامش.'
+        }
+      },
+      lie: {
+        text: 'گربه بود — از پنجره پرید.',
+        feedback: {
+          title: 'سنگینی‌ای که پنهان می‌ماند',
+          text: 'لحظه‌ای نجات پیدا کردی. اما آن دروغ، کوچک نیست — تا شب، تا فردا، تا وقتی که یادت برود کجا پنهانش کردی.'
+        }
+      }
+    }
+  },
+  {
+    id: 'scenario-2',
+    label: 'لحظه‌ی دوم',
+    title: 'دیر رسیدن',
+    narrative: 'زنگ خورده. کلاس شروع شده. در راهرو ایستاده‌ای، دستت روی دستگیره‌ی در. معلم پشت در است. اگر بگویی «ترافیک بود»، کسی نمی‌فهمد واقعاً چرا دیر کردی.',
+    choices: {
+      truth: {
+        text: 'بیدار شدن سخت بود. تقصیر خودم است.',
+        feedback: {
+          title: 'چیزی که با خودت حمل می‌کنی',
+          text: 'صدای معلم را می‌شنوی، اما صدای درون خودت بلندتر است. این بار، آن صدا با توست.'
+        }
+      },
+      lie: {
+        text: 'ترافیک سنگین بود — واقعاً دست من نبود.',
+        feedback: {
+          title: 'سنگینی‌ای که پنهان می‌ماند',
+          text: 'سرت را پایین می‌اندازی و روی صندلی می‌نشینی. اما صندلی، این بار، کمی ناراحت‌تر است.'
+        }
+      }
+    }
+  },
+  {
+    id: 'scenario-3',
+    label: 'لحظه‌ی سوم',
+    title: 'نمره‌ی امتحان',
+    narrative: 'کاغذ امتحان روی میز است. نمره، پایین‌تر از آن است که انتظار داشتی. مادرت می‌پرسد: «چطور بود؟» و در نگاهت، چیزی هست که هنوز تصمیم نگرفته.',
+    choices: {
+      truth: {
+        text: 'خوب نبود. باید بیشتر تلاش کنم.',
+        feedback: {
+          title: 'چیزی که با خودت حمل می‌کنی',
+          text: 'سنگین است، اما صاف. و صاف بودن، همیشه سبک‌تر از خم شدن است.'
+        }
+      },
+      lie: {
+        text: 'هنوز تصحیح نشده. بعداً می‌فهمم.',
+        feedback: {
+          title: 'سنگینی‌ای که پنهان می‌ماند',
+          text: 'بهانه‌ات قبول شد. اما هر بار که به آن فکر می‌کنی، یک لایه‌ی نازک از خودت را جا می‌گذاری.'
+        }
+      }
+    }
+  }
+];
+
+const REFLECTIONS = {
+  3: {
+    title: 'صاف ایستادی.',
+    text: 'هر سه بار، سنگینی را انتخاب کردی. این ساده نبود. و همین، یعنی صبر — نه سکوت، نه انتظار — بلکه ایستادن روی حقیقتی که خودت می‌دانی.'
+  },
+  2: {
+    title: 'نزدیک بودی.',
+    text: 'یک بار، مسیر دیگری را رفتی. این هم بخشی از راه است. صبر، تمرین است — نه استعداد. فردا، یک فرصت دیگر داری.'
+  },
+  1: {
+    title: 'شروع سختی بود.',
+    text: 'گاهی، دروغ سریع‌تر از صبر جواب می‌دهد. اما جواب، همیشه آرامش نیست. یک بار صاف ایستادی — همان یک بار، شروع است.'
+  },
+  0: {
+    title: 'همه‌ی ما آنجا بوده‌ایم.',
+    text: 'هر سه بار، بهانه را انتخاب کردی. این را با تو نمی‌شماریم. فقط یک چیز می‌پرسیم: کدام لحظه، بیشتر تو را به فکر فرو برد؟ همان یکی، شروع است.'
+  }
+};
+
+const ICONS = {
+  truth: '<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="28" cy="28" r="22" stroke="#7FB99A" stroke-width="1.5" opacity="0.55"/><line x1="17" y1="28" x2="39" y2="28" stroke="#7FB99A" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  lie: '<svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="28" cy="28" r="22" stroke="#C98274" stroke-width="1.5" opacity="0.55"/><path d="M20 20 L28 27 L23 32 L31 40" stroke="#C98274" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   02. STATE
+   ═══════════════════════════════════════════════════════════════ */
+const state = {
+  currentScenario: 0,
+  choices: [],
+  currentScreen: 'splash',
+  lastFocusedChoice: null,
+  feedbackOpen: false,
+  feedbackReady: false,
+  feedbackTimer: null
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   03. DOM CACHE
+   ═══════════════════════════════════════════════════════════════ */
+const DOM = {
+  starField: document.getElementById('starField'),
+  splash: document.querySelector('[data-screen="splash"]'),
+  splashLine: document.getElementById('splashLine'),
+  splashEyebrow: document.getElementById('splashEyebrow'),
+  splashTitle: document.getElementById('splashTitle'),
+  splashOrnament: document.getElementById('splashOrnament'),
+  splashSubtitle: document.getElementById('splashSubtitle'),
+  splashBody: document.getElementById('splashBody'),
+  startBtn: document.getElementById('startBtn'),
+  signature: document.getElementById('signature'),
+  liveRegion: document.getElementById('liveRegion'),
+  overlay: document.getElementById('feedbackOverlay'),
+  feedbackCard: document.getElementById('feedbackCard'),
+  feedbackGlow: document.getElementById('feedbackGlow'),
+  feedbackIcon: document.getElementById('feedbackIcon'),
+  feedbackTitle: document.getElementById('feedbackTitle'),
+  feedbackText: document.getElementById('feedbackText'),
+  feedbackBtn: document.getElementById('feedbackBtn'),
+  reflectionScreen: document.querySelector('[data-screen="reflection"]'),
+  reflectionOrnament: document.getElementById('reflectionOrnament'),
+  reflectionTitle: document.getElementById('reflectionTitle'),
+  reflectionText: document.getElementById('reflectionText'),
+  reflectionDivider: document.getElementById('reflectionDivider'),
+  reflectionLesson: document.getElementById('reflectionLesson'),
+  reflectionAttribution: document.getElementById('reflectionAttribution'),
+  restartBtn: document.getElementById('restartBtn')
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   04. UTILITIES
+   ═══════════════════════════════════════════════════════════════ */
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const mqReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+function announce(msg) {
+  DOM.liveRegion.textContent = '';
+  // small delay so screen readers pick up the change
+  setTimeout(() => { DOM.liveRegion.textContent = msg; }, 60);
+}
+
+function screenFor(name) {
+  return document.querySelector(`[data-screen="${name}"]`);
+}
+
+function setSignatureVisible(visible) {
+  DOM.signature.classList.toggle('is-visible', visible);
+}
+
+function starString() {
+  const parts = [];
+  for (let i = 0; i < 90; i++) {
+    const x = (Math.random() * 100).toFixed(2);
+    const y = (Math.random() * 100).toFixed(2);
+    const alpha = (0.22 + Math.random() * 0.42).toFixed(2);
+    parts.push(`${x}vw ${y}vh 0 ${Math.random() < 0.85 ? 0 : 0.5}px rgba(232,234,242,${alpha})`);
+  }
+  return parts.join(', ');
+}
+
+function renderStars() {
+  DOM.starField.style.boxShadow = starString();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   05. SCREEN TRANSITIONS
+   ═══════════════════════════════════════════════════════════════ */
+function showScreen(name) {
+  if (state.currentScreen === name) return;
+  const current = document.querySelector('.screen.is-active');
+  const next = screenFor(name);
+  if (!next) return;
+
+  // Announce
+  let announcement = '';
+  if (name.startsWith('scenario-')) {
+    const idx = parseInt(name.split('-')[1], 10) - 1;
+    const sc = SCENARIOS[idx];
+    if (sc) announcement = `ورود به ${sc.label} — ${sc.title}`;
+  } else if (name === 'reflection') {
+    announcement = 'ورود به بازتاب پایانی';
+  } else if (name === 'splash') {
+    announcement = 'بازگشت به آغاز';
+  }
+  if (announcement) announce(announcement);
+
+  // Prepare next
+  if (name.startsWith('scenario-')) {
+    const idx = parseInt(name.split('-')[1], 10) - 1;
+    renderScenario(idx);
+  } else if (name === 'reflection') {
+    renderReflection();
+  }
+
+  next.classList.add('is-active');
+  gsap.set(next, { opacity: 0, y: 0 });
+
+  if (current && current !== next) {
+    gsap.to(current, {
+      opacity: 0,
+      y: -5,
+      duration: prefersReduced ? 0.15 : 0.32,
+      ease: 'power2.in',
+      onComplete: () => {
+        current.classList.remove('is-active');
+        gsap.set(current, { clearProps: 'y' });
+      }
+    });
+  }
+
+  gsap.to(next, {
+    opacity: 1,
+    duration: prefersReduced ? 0.15 : 0.55,
+    delay: prefersReduced ? 0 : 0.24,
+    ease: 'power2.out'
+  });
+
+  // Post-entry animations
+  if (name.startsWith('scenario-')) {
+    animateScenarioIn(next);
+  } else if (name === 'reflection') {
+    animateReflectionIn();
+  }
+
+  // Signature visibility
+  setSignatureVisible(name === 'splash' || name === 'reflection');
+
+  // Scroll to top of new screen
+  next.scrollTop = 0;
+
+  state.currentScreen = name;
+  if (name.startsWith('scenario-')) {
+    state.currentScenario = parseInt(name.split('-')[1], 10) - 1;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   06. SPLASH ENTRANCE
+   ═══════════════════════════════════════════════════════════════ */
+function animateSplash() {
+  if (prefersReduced) {
+    gsap.set([DOM.splashLine, DOM.splashEyebrow, DOM.splashTitle, DOM.splashOrnament,
+              DOM.splashSubtitle, DOM.splashBody, DOM.startBtn], { opacity: 1, clearProps: 'transform,filter' });
+    setSignatureVisible(true);
+    DOM.signature.classList.add('is-shimmering');
+    setTimeout(() => DOM.signature.classList.remove('is-shimmering'), 1200);
+    return;
+  }
+
+  const tl = gsap.timeline();
+  gsap.set([DOM.splashLine, DOM.splashEyebrow, DOM.splashTitle, DOM.splashOrnament,
+            DOM.splashSubtitle, DOM.splashBody, DOM.startBtn], { opacity: 0 });
+  gsap.set(DOM.splashLine, { scaleX: 0 });
+  gsap.set(DOM.splashOrnament, { rotate: 45, scale: 0.8 });
+  gsap.set(DOM.splashTitle, { filter: 'blur(4px)' });
+
+  tl.to(DOM.splashLine, { scaleX: 1, duration: 0.6, ease: 'power3.out', opacity: 1 }, 0)
+    .to(DOM.splashEyebrow, { opacity: 1, duration: 0.5, ease: 'power2.out' }, 0.2)
+    .to(DOM.splashTitle, { opacity: 1, filter: 'blur(0px)', duration: 0.7, ease: 'power3.out' }, 0.4)
+    .to(DOM.splashOrnament, { opacity: 0.5, rotate: 0, scale: 1, duration: 0.6, ease: 'power3.out' }, 0.9)
+    .to([DOM.splashSubtitle, DOM.splashBody], { opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power2.out' }, 1.1)
+    .to(DOM.startBtn, {
+      opacity: 1, duration: 0.5, ease: 'power2.out',
+      onComplete: () => {
+        gsap.fromTo(DOM.startBtn, { scale: 1 }, {
+          scale: 1.02, duration: 0.45, yoyo: true, repeat: 1, ease: 'sine.inOut'
+        });
+      }
+    }, 1.4)
+    .call(() => {
+      setSignatureVisible(true);
+      DOM.signature.classList.add('is-shimmering');
+      setTimeout(() => DOM.signature.classList.remove('is-shimmering'), 1300);
+    }, null, 1.9);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   07. SCENARIO RENDERER
+   ═══════════════════════════════════════════════════════════════ */
+function renderScenario(idx) {
+  const sc = SCENARIOS[idx];
+  if (!sc) return;
+  const screen = screenFor(sc.id);
+  if (!screen) return;
+
+  const progressEls = screen.querySelectorAll('.progress-diamond');
+  progressEls.forEach((el, i) => {
+    el.classList.remove('is-current', 'is-truth', 'is-lie');
+    if (i < state.choices.length) {
+    //   el.classList.add(state.choices[i] === 'truth' ? 'is-tr
+          el.classList.add(state.choices[i] === 'truth' ? 'is-truth' : 'is-lie');
+    } else if (i === idx) {
+      el.classList.add('is-current');
+    }
+  });
+
+  screen.querySelector('.moment-label').textContent = sc.label;
+  screen.querySelector('.scenario-title').textContent = sc.title;
+  screen.querySelector('.narrative').textContent = sc.narrative;
+  screen.querySelector('.scenario-foot').textContent = `لحظه‌ی ${idx + 1} از ۳`;
+
+  const truthBtn = screen.querySelector('[data-choice="truth"]');
+  const lieBtn = screen.querySelector('[data-choice="lie"]');
+  truthBtn.querySelector('.choice-text').textContent = sc.choices.truth.text;
+  lieBtn.querySelector('.choice-text').textContent = sc.choices.lie.text;
+
+  // Refresh choice handlers (idempotent — remove then add)
+  truthBtn.onclick = () => handleChoice(idx, 'truth');
+  lieBtn.onclick = () => handleChoice(idx, 'lie');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCENARIO ENTRANCE ANIMATION
+   ═══════════════════════════════════════════════════════════════ */
+function animateScenarioIn(screen) {
+  const title = screen.querySelector('.scenario-title');
+  const divider = screen.querySelector('.scenario-divider');
+  const narrative = screen.querySelector('.narrative');
+  const hinge = screen.querySelector('.hinge');
+  const choices = screen.querySelectorAll('.choice');
+
+  if (prefersReduced) {
+    gsap.set([title, narrative, hinge, divider, ...choices], { opacity: 1, clearProps: 'transform' });
+    return;
+  }
+
+  gsap.set([title, narrative, hinge], { opacity: 0 });
+  gsap.set(divider, { scaleX: 0 });
+  gsap.set(choices, { opacity: 0, y: 10 });
+  gsap.set(title, { y: 8 });
+
+  const tl = gsap.timeline({ delay: 0.55 });
+  tl.to(title, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0)
+    .to(divider, { scaleX: 1, duration: 0.5, ease: 'power3.out' }, 0.15)
+    .to(narrative, { opacity: 1, duration: 0.7, ease: 'power2.out' }, 0.35)
+    .to(hinge, { opacity: 1, duration: 0.5, ease: 'power2.out' }, 0.95)
+    .to(choices, {
+      opacity: 1, y: 0, duration: 0.55, stagger: 0.06, ease: 'power3.out'
+    }, 1.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   08. CHOICE HANDLER
+   ═══════════════════════════════════════════════════════════════ */
+function handleChoice(idx, kind) {
+  if (state.feedbackOpen) return;
+  if (state.choices[idx] !== undefined) return; // already answered
+  const sc = SCENARIOS[idx];
+  const choice = sc.choices[kind];
+  if (!choice) return;
+
+  state.choices[idx] = kind;
+  state.lastFocusedChoice = kind;
+
+  // Update progress diamond for this scenario
+  const screen = screenFor(sc.id);
+  if (screen) {
+    const diamonds = screen.querySelectorAll('.progress-diamond');
+    diamonds.forEach((d, i) => {
+      d.classList.remove('is-current');
+      if (i < state.choices.length && state.choices[i]) {
+        d.classList.add(state.choices[i] === 'truth' ? 'is-truth' : 'is-lie');
+      }
+    });
+  }
+
+  announce(kind === 'truth' ? 'انتخاب شد: راست‌گویی' : 'انتخاب شد: دروغ');
+  openFeedback(kind, choice.feedback);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   09. FEEDBACK RENDERER + ENTRANCE
+   ═══════════════════════════════════════════════════════════════ */
+function openFeedback(kind, feedback) {
+  state.feedbackOpen = true;
+  state.feedbackReady = false;
+
+  DOM.feedbackTitle.textContent = feedback.title;
+  DOM.feedbackText.textContent = feedback.text;
+  DOM.feedbackIcon.innerHTML = ICONS[kind] || '';
+
+  DOM.feedbackGlow.classList.remove('is-truth', 'is-lie');
+  DOM.feedbackGlow.classList.add(kind === 'truth' ? 'is-truth' : 'is-lie');
+
+  DOM.feedbackBtn.disabled = true;
+  DOM.feedbackBtn.style.pointerEvents = 'none';
+  DOM.feedbackBtn.style.opacity = '0.35';
+
+  DOM.overlay.hidden = false;
+  DOM.overlay.style.opacity = 0;
+
+  // Store focus to return
+  state.previousFocus = document.activeElement;
+
+  if (prefersReduced) {
+    DOM.overlay.style.opacity = 1;
+    gsap.set([DOM.feedbackCard, DOM.feedbackGlow, DOM.feedbackIcon,
+              DOM.feedbackTitle, DOM.feedbackText, DOM.feedbackBtn], { opacity: 1, clearProps: 'transform' });
+    DOM.feedbackGlow.style.opacity = 0.15;
+    startQuietBeat();
+    DOM.feedbackBtn.focus();
+    return;
+  }
+
+  gsap.set(DOM.feedbackCard, { opacity: 0, scale: 0.94, y: 12 });
+  gsap.set(DOM.feedbackGlow, { opacity: 0, scale: 0.8 });
+  gsap.set(DOM.feedbackIcon, { opacity: 0, rotate: -8 });
+  gsap.set([DOM.feedbackTitle, DOM.feedbackText], { opacity: 0 });
+  gsap.set(DOM.feedbackBtn, { opacity: 0 });
+
+  const tl = gsap.timeline();
+  tl.to(DOM.overlay, { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0)
+    .to(DOM.feedbackCard, { opacity: 1, scale: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.05)
+    .to(DOM.feedbackGlow, { opacity: 0.15, scale: 1, duration: 0.8, ease: 'power2.out' }, 0.1)
+    .to(DOM.feedbackIcon, { opacity: 1, rotate: 0, duration: 0.5, ease: 'power3.out' }, 0.25)
+    .to(DOM.feedbackTitle, { opacity: 1, duration: 0.4, ease: 'power2.out' }, 0.4)
+    .to(DOM.feedbackText, { opacity: 1, duration: 0.4, ease: 'power2.out' }, 0.5)
+    .to(DOM.feedbackBtn, {
+      opacity: 1, duration: 0.5, ease: 'power2.out',
+      onComplete: () => {
+        DOM.feedbackBtn.focus({ preventScroll: true });
+      }
+    }, 0.9);
+
+  startQuietBeat();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   10. FEEDBACK "QUIET BEAT" GATE
+   ═══════════════════════════════════════════════════════════════ */
+function startQuietBeat() {
+  if (state.feedbackTimer) clearTimeout(state.feedbackTimer);
+  state.feedbackTimer = setTimeout(() => {
+    state.feedbackReady = true;
+    DOM.feedbackBtn.disabled = false;
+    DOM.feedbackBtn.style.pointerEvents = 'auto';
+    gsap.to(DOM.feedbackBtn, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+    DOM.feedbackBtn.style.opacity = '';
+  }, 1500);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CLOSE FEEDBACK / ADVANCE
+   ═══════════════════════════════════════════════════════════════ */
+function closeFeedbackAndAdvance() {
+  if (!state.feedbackReady || !state.feedbackOpen) return;
+  state.feedbackOpen = false;
+  state.feedbackReady = false;
+
+  if (prefersReduced) {
+    DOM.overlay.hidden = true;
+    DOM.overlay.style.opacity = '';
+    advanceToNext();
+    return;
+  }
+
+  gsap.to(DOM.feedbackCard, { opacity: 0, scale: 0.96, y: 8, duration: 0.35, ease: 'power2.in' });
+  gsap.to(DOM.overlay, {
+    opacity: 0, duration: 0.35, ease: 'power2.in',
+    onComplete: () => {
+      DOM.overlay.hidden = true;
+      DOM.overlay.style.opacity = '';
+      gsap.set(DOM.feedbackCard, { clearProps: 'transform,opacity' });
+      advanceToNext();
+    }
+  });
+}
+
+function advanceToNext() {
+  const nextIdx = state.currentScenario + 1;
+  if (nextIdx < SCENARIOS.length) {
+    showScreen(SCENARIOS[nextIdx].id);
+  } else {
+    showScreen('reflection');
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   11. REFLECTION RENDERER
+   ═══════════════════════════════════════════════════════════════ */
+function renderReflection() {
+  const truthCount = state.choices.filter(c => c === 'truth').length;
+  const data = REFLECTIONS[truthCount] || REFLECTIONS[0];
+  DOM.reflectionTitle.textContent = data.title;
+  DOM.reflectionText.textContent = data.text;
+}
+
+function animateReflectionIn() {
+  const els = [
+    DOM.reflectionOrnament,
+    DOM.reflectionTitle,
+    DOM.reflectionText,
+    DOM.reflectionDivider,
+    DOM.reflectionLesson,
+    DOM.reflectionAttribution,
+    DOM.restartBtn
+  ];
+  const preface = DOM.reflectionScreen.querySelector('.reflection-preface');
+
+  if (prefersReduced) {
+    gsap.set([...els, preface], { opacity: 1, clearProps: 'transform,filter' });
+    return;
+  }
+
+  gsap.set([...els, preface], { opacity: 0 });
+  gsap.set(DOM.reflectionOrnament, { rotate: 0 });
+  gsap.set(DOM.reflectionTitle, { filter: 'blur(6px)' });
+  gsap.set(DOM.reflectionDivider, { scaleX: 0 });
+  gsap.set(DOM.reflectionLesson, { scale: 0.98 });
+
+  const tl = gsap.timeline({ delay: 0.6 });
+  tl.to(DOM.reflectionOrnament, { opacity: 0.6, duration: 0.5, ease: 'power2.out' }, 0)
+    .to(DOM.reflectionOrnament, { rotate: 90, duration: 1.6, ease: 'power2.inOut' }, 0.1)
+    .to(preface, { opacity: 1, duration: 0.6, ease: 'power2.out' }, 0.4)
+    .to(DOM.reflectionTitle, { opacity: 1, filter: 'blur(0px)', duration: 1.2, ease: 'power3.out' }, 0.7)
+    .to(DOM.reflectionText, { opacity: 1, duration: 0.9, ease: 'power2.out' }, 1.5)
+    .to(DOM.reflectionDivider, { scaleX: 1, duration: 0.7, ease: 'power3.out' }, 2.1)
+    .to(DOM.reflectionLesson, { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' }, 2.4)
+    .to(DOM.reflectionAttribution, { opacity: 1, duration: 0.6, ease: 'power2.out' }, 2.9)
+    .to(DOM.restartBtn, { opacity: 1, duration: 0.6, ease: 'power2.out' }, 3.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   12. RESTART
+   ═══════════════════════════════════════════════════════════════ */
+function restart() {
+  state.currentScenario = 0;
+  state.choices = [];
+  state.currentScreen = '';
+  state.feedbackOpen = false;
+  state.feedbackReady = false;
+  if (state.feedbackTimer) clearTimeout(state.feedbackTimer);
+
+  // Reset all scenario progress diamonds
+  document.querySelectorAll('.progress').forEach(progress => {
+    progress.querySelectorAll('.progress-diamond').forEach((d, i) => {
+      d.classList.remove('is-current', 'is-truth', 'is-lie');
+      if (i === 0) d.classList.add('is-current');
+    });
+  });
+
+  // Close overlay if somehow open
+  DOM.overlay.hidden = true;
+  DOM.overlay.style.opacity = '';
+
+  showScreen('splash');
+  // Re-run splash animation for a "fresh arrival" feeling
+  setTimeout(() => animateSplash(), 100);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   13. KEYBOARD NAVIGATION
+   ═══════════════════════════════════════════════════════════════ */
+function setupKeyboard() {
+  document.addEventListener('keydown', (e) => {
+    // Overlay: ESC closes if ready
+    if (state.feedbackOpen) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        if (state.feedbackReady) closeFeedbackAndAdvance();
+      }
+      if (e.key === 'Tab') {
+        // Trap focus inside the overlay
+        const focusables = DOM.overlay.querySelectorAll('button:not([disabled])');
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+      return;
+    }
+
+    // Splash: Enter activates start when focused on it
+    if (state.currentScreen === 'splash') {
+      if (e.key === 'Enter' && document.activeElement !== DOM.startBtn) {
+        e.preventDefault();
+        DOM.startBtn.click();
+      }
+      return;
+    }
+
+    // Scenario: Enter activates focused choice (native), Arrow keys navigate
+    if (state.currentScreen.startsWith('scenario-')) {
+      const screen = screenFor(state.currentScreen);
+      if (!screen) return;
+      const choices = Array.from(screen.querySelectorAll('.choice'));
+      const currentFocus = document.activeElement;
+      const focusIdx = choices.indexOf(currentFocus);
+
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        if (focusIdx !== -1) {
+          e.preventDefault();
+          choices[(focusIdx + 1) % choices.length].focus();
+        }
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        if (focusIdx !== -1) {
+          e.preventDefault();
+          choices[(focusIdx - 1 + choices.length) % choices.length].focus();
+        }
+      }
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   14. ACCESSIBILITY ANNOUNCEMENTS
+   ═══════════════════════════════════════════════════════════════ */
+// announce() is defined in utilities above. The live region uses
+// aria-live="polite" and aria-atomic="true" for full message reads.
+
+/* ═══════════════════════════════════════════════════════════════
+   15. BOOT
+   ═══════════════════════════════════════════════════════════════ */
+function boot() {
+  renderStars();
+
+  // Wire up primary interactions
+  DOM.startBtn.addEventListener('click', () => {
+    showScreen(SCENARIOS[0].id);
+  });
+  DOM.feedbackBtn.addEventListener('click', closeFeedbackAndAdvance);
+  DOM.restartBtn.addEventListener('click', restart);
+
+  // Pre-render scenario 1, 2, 3 content (so transitions feel instant)
+  SCENARIOS.forEach((sc, idx) => {
+    const screen = screenFor(sc.id);
+    if (!screen) return;
+    screen.querySelector('.moment-label').textContent = sc.label;
+    screen.querySelector('.scenario-title').textContent = sc.title;
+    screen.querySelector('.narrative').textContent = sc.narrative;
+    screen.querySelector('.scenario-foot').textContent = `لحظه‌ی ${idx + 1} از ۳`;
+    screen.querySelector('[data-choice="truth"] .choice-text').textContent = sc.choices.truth.text;
+    screen.querySelector('[data-choice="lie"] .choice-text').textContent = sc.choices.lie.text;
+  });
+
+  // Splash entrance
+  animateSplash();
+
+  // Keyboard + accessibility
+  setupKeyboard();
+
+  // Reduced motion: listen for changes at runtime
+  mqReduced.addEventListener('change', () => {
+    if (mqReduced.matches) {
+      // Kill any active tweens and set final states
+      gsap.globalTimeline.clear();
+      document.querySelectorAll('.screen').forEach(s => {
+        if (s.classList.contains('is-active')) {
+          gsap.set(s, { opacity: 1, y: 0 });
+        }
+      });
+    }
+  });
+
+  // Prevent the browser from "restoring" scroll on mobile when overlay opens
+  document.addEventListener('touchmove', (e) => {
+    if (state.feedbackOpen && DOM.overlay.contains(e.target)) {
+      // allow scrolling inside the card if content overflows
+      const card = DOM.feedbackCard;
+      if (!card.contains(e.target)) e.preventDefault();
+    }
+  }, { passive: false });
+}
+
+// Wait for DOM + GSAP to be ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  // GSAP loads synchronously via CDN; if somehow not present, guard
+  if (typeof gsap === 'undefined') {
+    // Fallback: add a minimal gsap shim so the game remains playable
+    window.gsap = {
+      set: (el, props) => {
+        const els = Array.isArray(el) ? el : (el && el.nodeType ? [el] : Array.from(el || []));
+        els.forEach(e => { if (!e || !e.style) return; Object.keys(props).forEach(k => {
+          if (k === 'opacity') e.style.opacity = props[k];
+          else if (k === 'y') e.style.transform = `translateY(${props[k]}px)`;
+          else if (k === 'x') e.style.transform = `translateX(${props[k]}px)`;
+          else if (k === 'scale') e.style.transform = `scale(${props[k]})`;
+          else if (k === 'scaleX') e.style.transform = `scaleX(${props[k]})`;
+          else if (k === 'rotate') e.style.transform = `rotate(${props[k]}deg)`;
+          else if (k === 'filter') e.style.filter = props[k];
+        }); });
+      },
+      to: (el, props) => {
+        const els = Array.isArray(el) ? el : (el && el.nodeType ? [el] : Array.from(el || []));
+        els.forEach(e => {
+          if (!e || !e.style) return;
+          if ('opacity' in props) e.style.opacity = props.opacity;
+          if ('transform' in props) e.style.transform = props.transform;
+          if ('filter' in props) e.style.filter = props.filter;
+          if ('transition' in props) e.style.transition = props.transition;
+          if (typeof props.onComplete === 'function') setTimeout(props.onComplete, 300);
+        });
+      },
+      fromTo: (el, from, to) => { window.gsap.set(el, from); window.gsap.to(el, to); },
+      timeline: () => ({
+        to: function() { return this; },
+        call: function() { return this; }
+      }),
+      globalTimeline: { clear: () => {} }
+    };
+    boot();
+  } else {
+    boot();
+  }
+}
+</script>
+</body>
+</html>
